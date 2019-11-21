@@ -1,5 +1,5 @@
-case (s0(z)) {
+case (s0(s1(z))) {
   z -> z
-| s0(x) -> s0(z)
-| s1(y) -> s1(z)
+| s0(x) -> x
+| s1(y) -> y
 }

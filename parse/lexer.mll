@@ -26,6 +26,7 @@ rule read =
 | "s1" { S1 }
 | "case" { CASE }
 | "rec" { REC }
+| "with" { WITH }
 | "->" { ARROW }
 | '{' { LEFT_BRACE }
 | '}' { RIGHT_BRACE }
@@ -34,6 +35,7 @@ rule read =
 | ')' { RIGHT_PAREN }
 | '|' { BAR }
 | "[]" { BOX }
+| "nat" { NAT }
 | id { ID (Lexing.lexeme lexbuf) }
 | _ { raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf))}
 | eof { EOF }

@@ -19,7 +19,13 @@ You can also run `dune exec -- ./system_bc.exe FILENAME` to run the interpreter.
 
 ## Syntax
 ```
-e ::= x
+Type t ::=
+    | nat
+    | t1 -> t2
+    | [](t1 -> t2)
+
+Expr e ::=
+    | x
     | fun (x : tau) e
     | e1(e2)
     | z

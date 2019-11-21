@@ -1,7 +1,7 @@
 open Core
 
 let main ~input_file =
-  Printf.printf !"Parsed: %{sexp:Expr.t option}\n" (Parse.lex_and_parse input_file)
+  Printf.printf !"Parsed: %{sexp:Ir.Expr.t option}\n" (Parse.lex_and_parse input_file)
 
 let command =
   Command.basic ~summary:"System BC"
