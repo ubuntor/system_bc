@@ -1,1 +1,4 @@
-(fun (x : [](nat -> [](nat -> nat))) (s0(x)))(z)
+(fun (x : nat -> nat -> nat)
+ fun (y : nat -> nat)
+ x
+)(z)

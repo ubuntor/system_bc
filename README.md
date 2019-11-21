@@ -21,13 +21,13 @@ You can also run `dune exec -- ./system_bc.exe FILENAME` to run the interpreter.
 ```
 Type t ::=
     | nat
-    | t1 -> t2
-    | [](t1 -> t2)
+    | t1 -> t2               Arrows associate to the right.
+    | [](t1 -> t2)           Boxed arrows require explicit parentheses.
 
 Expr e ::=
     | x
     | fun (x : tau) e
-    | e1(e2)
+    | (e1)(e2)               Function application requires explicit parentheses.
     | z
     | s0(e)
     | s1(e)
