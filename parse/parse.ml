@@ -19,6 +19,7 @@ let parse lexbuf =
 let lex_and_parse filename =
   let inx = In_channel.create filename in
   let lexbuf = Lexing.from_channel inx in
+  lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
   let parsed = parse lexbuf in
   In_channel.close inx;
   parsed

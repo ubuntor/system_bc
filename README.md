@@ -7,8 +7,11 @@ Make sure `opam` is installed, then install `dune`, `core`, `ppx_jane`,
 
 Then run `make`. The executable will be in `_build/default/sdl_compiler.exe`.
 
+You can also run `dune exec -- ./system_bc.exe FILENAME` to run the interpreter.
+
 ## Structure
   - `system_bc.ml`: Toplevel commandline. Runs all phases of compilation.
+  - `ir/`: Intermediate representations.
   - `parse/`: Parser and lexer.
   - `check/`: Static typechecking.
   - `interpreter/`: Interpreter.
