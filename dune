@@ -1,0 +1,6 @@
+(include_subdirs unqualified)
+
+(executable
+ (name system_bc)
+ (libraries core)
+ (preprocess (pps ppx_jane)))

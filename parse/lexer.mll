@@ -1,0 +1,37 @@
+{
+open Lexing
+open Parser
+
+exception SyntaxError of string
+
+let next_line lexbuf =
+  let pos = lexbuf.lex_curr_p in
+  lexbuf.lex_curr_p <-
+    { pos with pos_bol = lexbuf.lex_curr_pos;
+               pos_lnum = pos.pos_lnum + 1
+    }
+}
+
+let whitespace = [' ' '\t']+
+let newline = '\r' | '\n' | "\r\n"
+let id = ['a'-'z' 'A'-'Z' '_']['a'-'z' 'A'-'Z' '0'-'9' '_']*
+
+rule read =
+  parse
+| whitespace {read lexbuf}
+| newline {next_line lexbuf; read lexbuf}
+| "fun" { FUN }
+| 'z' { Z }
+| "s0" { S0 }
+| "s1" { S1 }
+| "case" { CASE }
+| "rec" { REC }
+| "->" { ARROW }
+| '{' { LEFT_BRACE }
+| '}' { RIGHT_BRACE }
+| ':' { COLON }
+| '(' { LEFT_PAREN }
+| ')' { RIGHT_PAREN }
+| "[]" { BOX }
+| _ { raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf))}
+| eof { EOF }
