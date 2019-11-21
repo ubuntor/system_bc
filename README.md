@@ -1,11 +1,11 @@
-# SdL Compiler
+# System BC Implementation
 
 ## Build Instructions
 
 Make sure `opam` is installed, then install `dune`, `core`, `ppx_jane`,
 `menhir` from `opam`.
 
-Then run `make`. The executable will be in `_build/default/sdl_compiler.exe`.
+Then run `make`. The executable will be in `_build/default/system_bc.exe`.
 
 You can also run `dune exec -- ./system_bc.exe FILENAME` to run the interpreter.
 
