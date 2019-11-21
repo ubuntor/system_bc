@@ -11,4 +11,25 @@ Then run `make`. The executable will be in `_build/default/sdl_compiler.exe`.
   - `system_bc.ml`: Toplevel commandline. Runs all phases of compilation.
   - `parse/`: Parser and lexer.
   - `check/`: Static typechecking.
-  - `interpreter/`: Interpreter
+  - `interpreter/`: Interpreter.
+  - `examples/`: Example System BC files.
+
+## Syntax
+```
+e ::= x
+    | fun (x : tau) e
+    | e1(e2)
+    | z
+    | s0(e)
+    | s1(e)
+    | case e {
+          z -> e0
+        | s0(x) -> e1
+        | s1(y) -> e2
+      }
+    | rec e {
+          z -> e0
+        | s0(x1) with y1 -> e1
+        | s1(x2) with y2 -> e2
+      }
+```
