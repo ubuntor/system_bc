@@ -32,6 +32,8 @@ rule read =
 | ':' { COLON }
 | '(' { LEFT_PAREN }
 | ')' { RIGHT_PAREN }
+| '|' { BAR }
 | "[]" { BOX }
+| id { ID (Lexing.lexeme lexbuf) }
 | _ { raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf))}
 | eof { EOF }

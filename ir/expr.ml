@@ -4,4 +4,6 @@ type t =
   | Z
   | S0 of t
   | S1 of t
-  [@@deriving sexp]
+  | App of t * t
+  | Case of t * (t * (string * t) * (string * t))
+[@@deriving sexp]
