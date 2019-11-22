@@ -5,7 +5,11 @@ let main ~input_file =
   | Some parsed -> (
       Printf.printf !"Parsed successfully: %{sexp:Ir.Expr.t}\n" parsed;
       match Check.typecheck parsed with
-      | Ok ty -> Printf.printf !"Type: %{sexp:Ir.Ty.t}\n" ty
+      | Ok ty ->
+          Printf.printf !"Type: %{sexp:Ir.Ty.t}\n" ty;
+          Printf.printf
+            !"Interpreted: %{sexp:Ir.Expr.t}\n"
+            (Interpreter.interpret parsed)
       | Error e -> Printf.printf !"Type error: %{sexp:Error.t}\n" e )
   | None -> Printf.printf !"Failed to parse"
 
