@@ -1,7 +1,13 @@
 open Core
 
 let main ~input_file =
-  Printf.printf !"Parsed: %{sexp:Ir.Expr.t option}\n" (Parse.lex_and_parse input_file)
+  match Parse.lex_and_parse input_file with
+  | Some parsed -> (
+      Printf.printf !"Parsed successfully: %{sexp:Ir.Expr.t}\n" parsed;
+      match Check.typecheck parsed with
+      | Ok ty -> Printf.printf !"Type: %{sexp:Ir.Ty.t}\n" ty
+      | Error e -> Printf.printf !"Type error: %{sexp:Error.t}\n" e )
+  | None -> Printf.printf !"Failed to parse"
 
 let command =
   Command.basic ~summary:"System BC"

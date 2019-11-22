@@ -1,7 +1,7 @@
 open! Core
 
 module Ty = struct
-  type t = Nat | Arr of t * t | Boxarr of t * t [@@deriving sexp]
+  type t = Nat | Arr of t * t | Boxarr of t * t [@@deriving sexp, equal]
 end
 
 module Expr = struct
