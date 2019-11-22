@@ -14,6 +14,15 @@ let insert_gamma (delta, gamma) x ty =
   let gamma = String.Map.set gamma ~key:x ~data:ty in
   (delta, gamma)
 
+let rec subtype ty1 ty2 =
+  if Ty.equal ty1 ty2 then true
+  else
+    match (ty1, ty2) with
+    | Arr (ty11, ty12), Arr (ty21, ty22) ->
+        subtype ty21 ty11 && subtype ty12 ty22
+    | Arr _, Boxarr (ty21, ty22) -> subtype ty1 (Arr (ty21, ty22))
+    | _ -> false
+
 let rec infer expr ~context : Ty.t Or_error.t =
   let open Or_error.Let_syntax in
   let assert_ty e ~ty ~error ~context =
@@ -49,15 +58,15 @@ let rec infer expr ~context : Ty.t Or_error.t =
       match arr_ty with
       | Arr (ty1, ty2) ->
           let%bind ty1' = infer e2 ~context in
-          (* TODO subtyping? *)
-          if Ty.equal ty1 ty1' then Ok ty2
+          (* TODO check this *)
+          if subtype ty1' ty1 then Ok ty2
           else
             Or_error.error_s
               [%message "app: type mismatch" (ty1 : Ty.t) (ty1' : Ty.t)]
       | Boxarr (ty1, ty2) ->
           let%bind ty1' = infer e2 ~context:(delta, empty_context) in
-          (* TODO subtyping? *)
-          if Ty.equal ty1 ty1' then Ok ty2
+          (* TODO check this *)
+          if subtype ty1' ty1 then Ok ty2
           else
             Or_error.error_s
               [%message "app: type mismatch" (ty1 : Ty.t) (ty1' : Ty.t)]
