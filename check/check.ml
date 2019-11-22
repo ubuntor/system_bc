@@ -31,16 +31,31 @@ let rec infer expr ~context : Ty.t Or_error.t =
           | Some ty -> Ok ty
           | None ->
               Or_error.error_s [%message "var: not in context" (x : string)] ) )
-  | Fun _ -> Or_error.error_s [%message "not implemented"] (* TODO *)
+  | Fun (ty1, x, e) -> (
+      match infer e ~context:(insert_gamma context x ty1) with
+      | Ok ty2 -> Ok (Arr (ty1, ty2))
+      | Error _ -> (
+          match infer e ~context:(insert_delta context x ty1) with
+          | Ok ty2 -> Ok (Boxarr (ty1, ty2))
+          | Error e ->
+              Or_error.error_s [%message "fun: failed to type" (e : Error.t)] )
+      )
   | Z -> Ok Nat
   | S0 e | S1 e ->
       let%bind _ = assert_ty e ~ty:Nat ~error:"successor: non-nat" ~context in
       Ok Ty.Nat
   | App (e1, e2) -> (
       let%bind arr_ty = infer e1 ~context in
-      let%bind ty1' = infer e2 ~context in
       match arr_ty with
       | Arr (ty1, ty2) ->
+          let%bind ty1' = infer e2 ~context in
+          (* TODO subtyping? *)
+          if Ty.equal ty1 ty1' then Ok ty2
+          else
+            Or_error.error_s
+              [%message "app: type mismatch" (ty1 : Ty.t) (ty1' : Ty.t)]
+      | Boxarr (ty1, ty2) ->
+          let%bind ty1' = infer e2 ~context:(delta, empty_context) in
           (* TODO subtyping? *)
           if Ty.equal ty1 ty1' then Ok ty2
           else

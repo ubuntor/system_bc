@@ -1,4 +1,4 @@
-(fun (x : nat -> nat -> nat)
+(fun (x : nat)
  fun (y : nat -> nat)
- x
+ (y)(x)
 )(z)
