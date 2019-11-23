@@ -8,8 +8,8 @@ let main ~input_file =
       | Ok ty ->
           Printf.printf !"Type: %{sexp:Ir.Ty.t}\n" ty;
           Printf.printf
-            !"Interpreted: %{sexp:Ir.Expr.t}\n"
-            (Interpreter.interpret parsed)
+            !"Evaluated: %{sexp:Ir.Expr.t}\n"
+            (Interpreter.evaluate parsed)
       | Error e -> Printf.printf !"Type error: %{sexp:Error.t}\n" e )
   | None -> Printf.printf !"Failed to parse"
 
