@@ -1,0 +1,8 @@
+(fun (x : nat)
+rec x {
+  z -> z
+| s0(x1) with y1 ->
+s0(y1)
+| s1(x2) with y2 ->
+s1(y2)
+})
