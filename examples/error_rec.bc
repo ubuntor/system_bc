@@ -1,0 +1,12 @@
+fun (x : nat)
+rec x {
+  z -> z
+| s0(_) with y1 ->
+    (fun (x : nat)
+    rec x {
+      z -> z
+    | s0(_) with _ -> z
+    | s1(_) with _ -> z
+    })(y1)
+| s1(_) with _ -> z
+}
