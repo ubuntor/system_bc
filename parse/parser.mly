@@ -1,52 +1,52 @@
-%token FUN
-%token Z
-%token S0
-%token S1
+(* tokens and aliases *)
+%token FUN "fun"
+%token Z "z"
+%token S0 "s0"
+%token S1 "s1"
 %token <string> ID
-%token CASE
-%token REC
-%token WITH
-%token ARROW
-%token LEFT_BRACE
-%token RIGHT_BRACE
-%token COLON
-%token LEFT_PAREN
-%token RIGHT_PAREN
-%token BAR
-%token NAT
-%token BOX
+%token CASE "case"
+%token REC "rec"
+%token WITH "with"
+%token ARROW "->"
+%token LEFT_BRACE "{"
+%token RIGHT_BRACE "}"
+%token COLON ":"
+%token LEFT_PAREN "("
+%token RIGHT_PAREN ")"
+%token BAR "|"
+%token NAT "nat"
+%token BOX "[]"
 %token EOF
 
-%right ARROW
+%right "->"
 
-%start <Ir.Expr.t option> top_expr
+%start <Ir.Expr.t> top_expr
 %%
 
 top_expr:
-| EOF { None }
-| e = expr EOF { Some e }
+| e = expr EOF { e }
 
 ty:
-| NAT { Ir.Ty.Nat }
-| tau1 = ty; ARROW; tau2 = ty { Ir.Ty.Arr (tau1, tau2) }
-| BOX; LEFT_PAREN; tau1 = ty; ARROW; tau2 = ty; RIGHT_PAREN { Ir.Ty.Boxarr (tau1, tau2) }
-| LEFT_PAREN; tau = ty; RIGHT_PAREN { tau }
+| "nat" { Ir.Ty.Nat }
+| tau1 = ty "->" tau2 = ty { Ir.Ty.Arr (tau1, tau2) }
+| "[]" "(" tau1 = ty "->" tau2 = ty ")" { Ir.Ty.Boxarr (tau1, tau2) }
+| "(" tau = ty ")" { tau }
 
 expr:
 | x = ID { Var(x) }
-| Z { Z }
-| S0; LEFT_PAREN; e = expr; RIGHT_PAREN { S0(e) }
-| S1; LEFT_PAREN; e = expr; RIGHT_PAREN { S1(e) }
-| LEFT_PAREN; e1 = expr; RIGHT_PAREN; LEFT_PAREN; e2 = expr; RIGHT_PAREN { App (e1, e2) }
-| CASE; e = expr; LEFT_BRACE;
-  Z; ARROW; e0 = expr;
-  BAR; S0; LEFT_PAREN; x = ID; RIGHT_PAREN; ARROW; e1 = expr;
-  BAR; S1; LEFT_PAREN; y = ID; RIGHT_PAREN; ARROW; e2 = expr;
-  RIGHT_BRACE { Case (e, (e0, (x, e1), (y, e2))) }
-| REC; e = expr; LEFT_BRACE;
-  Z; ARROW; e0 = expr;
-  BAR; S0; LEFT_PAREN; x1 = ID; RIGHT_PAREN; WITH; y1 = ID; ARROW; e1 = expr;
-  BAR; S1; LEFT_PAREN; x2 = ID; RIGHT_PAREN; WITH; y2 = ID; ARROW; e2 = expr;
-  RIGHT_BRACE { Rec (e, (e0, (x1, y1, e1), (x2, y2, e2))) }
-| FUN; LEFT_PAREN; x = ID; COLON; tau = ty; RIGHT_PAREN; e = expr { Fun (tau, x, e) }
-| LEFT_PAREN; e = expr; RIGHT_PAREN { e }
+| "z" { Z }
+| "s0" "(" e = expr ")" { S0(e) }
+| "s1" "(" e = expr ")" { S1(e) }
+| "(" e1 = expr ")" "(" e2 = expr ")" { App (e1, e2) }
+| "case" e = expr "{"
+  "z" "->" e0 = expr
+  "|" "s0" "(" x = ID ")" "->" e1 = expr
+  "|" "s1" "(" y = ID ")" "->" e2 = expr
+  "}" { Case (e, (e0, (x, e1), (y, e2))) }
+| "rec" e = expr "{"
+  "z" "->" e0 = expr
+  "|" "s0" "(" x1 = ID ")" "with" y1 = ID "->" e1 = expr
+  "|" "s1" "(" x2 = ID ")" "with" y2 = ID "->" e2 = expr
+  "}" { Rec (e, (e0, (x1, y1, e1), (x2, y2, e2))) }
+| "fun" "(" x = ID ":" tau = ty ")" e = expr { Fun (tau, x, e) }
+| "(" e = expr ")" { e }

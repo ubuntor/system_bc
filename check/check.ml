@@ -58,14 +58,12 @@ let rec infer expr ~context : Ty.t Or_error.t =
       match arr_ty with
       | Arr (ty1, ty2) ->
           let%bind ty1' = infer e2 ~context in
-          (* TODO check this *)
           if subtype ty1' ty1 then Ok ty2
           else
             Or_error.error_s
               [%message "app: type mismatch" (ty1 : Ty.t) (ty1' : Ty.t)]
       | Boxarr (ty1, ty2) ->
           let%bind ty1' = infer e2 ~context:(delta, empty_context) in
-          (* TODO check this *)
           if subtype ty1' ty1 then Ok ty2
           else
             Or_error.error_s
